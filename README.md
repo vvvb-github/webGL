@@ -40,5 +40,7 @@
   ![No pictrue](images/4.png)
   点击勾提交修改
   ![No picture](images/5.png)
-  输入提交说明信息，回车即可推上远程仓库
+  输入提交说明信息，回车
   ![No picture](images/6.png)
+  提交成功后Push到远程仓库
+  ![No picture](images/7.png)
