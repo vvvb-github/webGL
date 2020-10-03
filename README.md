@@ -28,19 +28,19 @@
 - 安装：[Git](https://git-scm.com/)
 - 克隆项目：
   1. 新建文件夹并在vscode打开
-   ![No picture](images/1.png)
+   ![No picture](./images/1.png)
   2. 终端输入`git clone https://github.com/vvvb-github/webGL.git`
-   ![No pictrue](images/2.png)
+   ![No pictrue](./images/2.png)
   此时可以看到项目已被克隆到本地
 - 项目管理：
   1. **Pull** 当其它协作者修改项目后，可以直接通过Pull操作将更改同步到本地；注意当本地文件的修改与远程仓库中其它协作者的修改产生冲突时会提示合并信息，请谨慎选择。
-   ![No pictrue](images/3.png)
+   ![No pictrue](./images/3.png)
   2. **Push** 当你修改项目后，请及时将修改同步到远程仓库，便于其它协作者及时同步更新。
   点击加号添加修改项
-  ![No pictrue](images/4.png)
+  ![No pictrue](./images/4.png)
   点击勾提交修改
-  ![No picture](images/5.png)
+  ![No picture](./images/5.png)
   输入提交说明信息，回车
-  ![No picture](images/6.png)
+  ![No picture](./images/6.png)
   提交成功后Push到远程仓库
-  ![No picture](images/7.png)
+  ![No picture](./images/7.png)
