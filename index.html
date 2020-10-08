@@ -5,33 +5,45 @@
     <title>图形学课设</title>
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="./libs/webgl-utils.js"></script>
+    <script src="./libs/webgl-mat.js"></script>
+    <script src="./libs/webgl-geometry.js"></script>
 </head>
 <body>
     <canvas id="canvas">
-        <script id="test-vertex" type="notjs">
+        <script id="webgl-vertex" type="notjs">
             // 一个属性变量，将会从缓冲中获取数据
             attribute vec4 a_position;
+            attribute vec4 a_color;
+            uniform mat4 u_matrix;
+            varying vec4 v_color;
            
             // 所有着色器都有一个main方法
             void main() {
               // gl_Position 是一个顶点着色器主要设置的变量
-              gl_Position = a_position;
-            } 
+              gl_Position = u_matrix * a_position;
+              // 将颜色传给片段着色器
+              v_color = a_color;
+            }
         </script>
            
-        <script id="test-fragment" type="notjs">
+        <script id="webgl-fragment" type="notjs">
             // 片断着色器没有默认精度，所以我们需要设置一个精度
             // mediump是一个不错的默认值，代表“medium precision”（中等精度）
             precision mediump float;
-            uniform vec4 u_color;
+            varying vec4 v_color;
             
             void main() {
                 // gl_FragColor是一个片断着色器主要设置的变量
-                gl_FragColor = u_color;
+                gl_FragColor = v_color;
             }
         </script>
     </canvas>
 
-    <script src="./js/test.js"></script>
+    <div id="tips">
+        按住WS绕x轴翻转、按住AD绕y轴翻转、按住space绕z轴翻转
+    </div>
+
+    <script src="./js/scene.js"></script>
+    <script src="./libs/webgl-engine.js"></script>
 </body>
 </html>

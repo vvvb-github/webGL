@@ -8,12 +8,11 @@
  */
 function resize(canvas) {
     // 获取浏览器中画布的显示尺寸
-    var displayWidth  = canvas.clientWidth;
-    var displayHeight = canvas.clientHeight;
+    let displayWidth  = canvas.clientWidth;
+    let displayHeight = canvas.clientHeight;
    
     // 检尺寸是否相同
-    if (canvas.width  != displayWidth || canvas.height != displayHeight) {
-   
+    if (canvas.width  != displayWidth || canvas.height != displayHeight) {   
         // 设置为相同的尺寸
         canvas.width  = displayWidth;
         canvas.height = displayHeight;
@@ -54,7 +53,7 @@ function resizeCanvasAndFit(gl) {
  */
 function compileShader(gl, shaderSource, shaderType) {
     // 创建着色器程序
-    var shader = gl.createShader(shaderType);
+    let shader = gl.createShader(shaderType);
    
     // 设置着色器的源码
     gl.shaderSource(shader, shaderSource);
@@ -63,7 +62,7 @@ function compileShader(gl, shaderSource, shaderType) {
     gl.compileShader(shader);
    
     // 检测编译是否成功
-    var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    let success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!success) {
         // 编译过程出错，获取错误信息。
         throw "could not compile shader:" + gl.getShaderInfoLog(shader);
@@ -85,13 +84,13 @@ function compileShader(gl, shaderSource, shaderType) {
  */
 function createShaderFromScript(gl, scriptId, opt_shaderType) {
     // 通过id找到script标签
-    var shaderScript = document.getElementById(scriptId);
+    let shaderScript = document.getElementById(scriptId);
     if (!shaderScript) {
       throw("*** Error: unknown script element" + scriptId);
     }
    
     // 提取标签内容。
-    var shaderSource = shaderScript.text;
+    let shaderSource = shaderScript.text;
    
     // 如果没有传着色器类型，就使用标签的 ‘type’ 属性
     if (!opt_shaderType) {
@@ -118,7 +117,7 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
  */
 function createProgram(gl, vertexShader, fragmentShader) {
     // 创建一个程序
-    var program = gl.createProgram();
+    let program = gl.createProgram();
 
     // 附上着色器
     gl.attachShader(program, vertexShader);
@@ -128,7 +127,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
     gl.linkProgram(program);
 
     // 检查链接是否成功
-    var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+    let success = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!success) {
         // 链接过程出现问题
         throw ("program failed to link:" + gl.getProgramInfoLog (program));
@@ -147,7 +146,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
  * @return {!WebGLProgram} 程序。
  */
 function createProgramFromScripts(gl, vertexShaderId, fragmentShaderId) {
-    var vertexShader = createShaderFromScript(gl, vertexShaderId, gl.VERTEX_SHADER);
-    var fragmentShader = createShaderFromScript(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
+    let vertexShader = createShaderFromScript(gl, vertexShaderId, gl.VERTEX_SHADER);
+    let fragmentShader = createShaderFromScript(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
     return createProgram(gl, vertexShader, fragmentShader);
 }
