@@ -120,9 +120,9 @@ function multiMat(a, b) {
  */
 function projectMat(width, height, depth) {
     return [
-        1 / width, 0, 0, 0,
-        0, 1 / height, 0, 0,
-        0, 0, 1 / depth, 0,
+        2 / width, 0, 0, 0,
+        0, 2 / height, 0, 0,
+        0, 0, 2 / depth, 0,
         0, 0, 0, 1,
     ];
 }
@@ -140,4 +140,17 @@ function unitMat() {
         0,0,1,0,
         0,0,0,1
     ];
+}
+
+
+function mt(vec, mat) {
+    let rt = new Array();
+    for(let i=0;i<4;++i) {
+        let tmp = 0;
+        for(let j=0;j<4;++j) {
+            tmp += vec[j]*mat[4*j+i];
+        }
+        rt.push(tmp);
+    }
+    return rt;
 }

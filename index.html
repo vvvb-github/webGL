@@ -19,10 +19,12 @@
            
             // 所有着色器都有一个main方法
             void main() {
-              // gl_Position 是一个顶点着色器主要设置的变量
-              gl_Position = u_matrix * a_position;
-              // 将颜色传给片段着色器
-              v_color = a_color;
+                vec4 pos = u_matrix * a_position;
+                float w = 1.0 + pos.z * 1.0;
+                // gl_Position 是一个顶点着色器主要设置的变量
+                gl_Position = vec4(pos.xyz, w);
+                // 将颜色传给片段着色器
+                v_color = a_color;
             }
         </script>
            
@@ -40,7 +42,15 @@
     </canvas>
 
     <div id="tips">
-        按住WS绕x轴翻转、按住AD绕y轴翻转、按住space绕z轴翻转
+        <button id="x-rotate" class="btn">绕x轴旋转</button>
+        <button id="y-rotate" class="btn">绕y轴旋转</button>
+        <button id="z-rotate" class="btn">绕z轴旋转</button>
+        <button id="up" class="btn">上移</button>
+        <button id="down" class="btn">下移</button>
+        <button id="left" class="btn">左移</button>
+        <button id="right" class="btn">右移</button>
+        <button id="front" class="btn">前移</button>
+        <button id="back" class="btn">后移</button>
     </div>
 
     <script src="./js/scene.js"></script>

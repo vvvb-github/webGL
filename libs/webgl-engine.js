@@ -16,6 +16,9 @@ function main() {
     // 剔除背面三角形
     gl.enable(gl.CULL_FACE);
 
+    // 开启深度缓冲
+    gl.enable(gl.DEPTH_TEST);
+
     // 调整画布
     resizeCanvasAndFit(gl);
 
@@ -59,8 +62,8 @@ function drawScene() {
 
         // 设置变换矩阵
         let matLocation = gl.getUniformLocation(program, "u_matrix");
-        let pmat = projectMat(gl.canvas.width, gl.canvas.height, gl.canvas.height);
-        let trans = multiMat(pmat, objList[i].transformMat);
+        let pmat = projectMat(gl.canvas.width, gl.canvas.height, 1000);  // 默认空间大小为canvas.width*canvas.height*1000
+        let trans = multiMat(objList[i].transformMat, pmat);
         gl.uniformMatrix4fv(matLocation, false, trans);
 
         // 设置颜色缓存数据

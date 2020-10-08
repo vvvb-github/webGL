@@ -13,13 +13,16 @@ let objList = [
         properties: {
             rx: 0,
             ry: 0,
-            rz: 0
+            rz: 0,
+            dx: 0,
+            dy: 0,
+            dz: 0
         },
         // 初始化函数，在启动时自动执行一次
         start: function() {
             // 设置着色器相关数据
             this.vertexArray = Cube();
-            this.transformMat = scaleMat(300,300,300);
+            this.transformMat = scaleMat(100,100,100);
             this.colorArray = new Array();
             for(let i=0;i<6;++i) {
                 let color = [Math.random(), Math.random(), Math.random(), 1];
@@ -28,22 +31,25 @@ let objList = [
                 }
             }
 
-            // 开启键盘监听事件
-            document.onkeydown = event=>{
-                if(event.keyCode == 87) this.properties.rx = 1;
-                if(event.keyCode == 83) this.properties.rx = -1;
-                if(event.keyCode == 65) this.properties.ry = 1;
-                if(event.keyCode == 68) this.properties.ry = -1;
-                if(event.keyCode == 32) this.properties.rz = 1;
-            };
-
-            document.onkeyup = event=>{
-                if(event.keyCode == 87) this.properties.rx = 0;
-                if(event.keyCode == 83) this.properties.rx = 0;
-                if(event.keyCode == 65) this.properties.ry = 0;
-                if(event.keyCode == 68) this.properties.ry = 0;
-                if(event.keyCode == 32) this.properties.rz = 0;
-            };
+            // 设置按钮监听事件
+            document.querySelector("#x-rotate").onmousedown = ()=>{this.properties.rx = 1;}
+            document.querySelector("#x-rotate").onmouseup = ()=>{this.properties.rx = 0;}
+            document.querySelector("#y-rotate").onmousedown = ()=>{this.properties.ry = 1;}
+            document.querySelector("#y-rotate").onmouseup = ()=>{this.properties.ry = 0;}
+            document.querySelector("#z-rotate").onmousedown = ()=>{this.properties.rz = 1;}
+            document.querySelector("#z-rotate").onmouseup = ()=>{this.properties.rz = 0;}
+            document.querySelector("#up").onmousedown = ()=>{this.properties.dy = 1;}
+            document.querySelector("#up").onmouseup = ()=>{this.properties.dy = 0;}
+            document.querySelector("#down").onmousedown = ()=>{this.properties.dy = -1;}
+            document.querySelector("#down").onmouseup = ()=>{this.properties.dy = 0;}
+            document.querySelector("#right").onmousedown = ()=>{this.properties.dx = 1;}
+            document.querySelector("#right").onmouseup = ()=>{this.properties.dx = 0;}
+            document.querySelector("#left").onmousedown = ()=>{this.properties.dx = -1;}
+            document.querySelector("#left").onmouseup = ()=>{this.properties.dx = 0;}
+            document.querySelector("#front").onmousedown = ()=>{this.properties.dz = 1;}
+            document.querySelector("#front").onmouseup = ()=>{this.properties.dz = 0;}
+            document.querySelector("#back").onmousedown = ()=>{this.properties.dz = -1;}
+            document.querySelector("#back").onmouseup = ()=>{this.properties.dz = 0;}
         },
         /**
          * 更新函数，每一帧均会被调用
@@ -57,7 +63,9 @@ let objList = [
                 this.transformMat = multiMat(this.transformMat, rotateMatY(this.properties.ry*Math.PI*dt/1000));
             } else if (this.properties.rz != 0) {
                 this.transformMat = multiMat(this.transformMat, rotateMatZ(this.properties.rz*Math.PI*dt/1000));
-            }
+            } 
+            this.transformMat = multiMat(this.transformMat, moveMat(this.properties.dx*300*dt/1000,
+                this.properties.dy*300*dt/1000, this.properties.dz*300*dt/1000));
         }
     },
     // {   // 模板代码
