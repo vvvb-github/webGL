@@ -17,7 +17,8 @@
 - index.css ：主页样式表
 
 ### 环境配置
-- [vscode](https://code.visualstudio.com/) 推荐使用，轻量便捷、插件丰富，官网下载安装即可
+- [Git](https://git-scm.com/downloads) git管理工具，官网免费下载安装
+- [vscode](https://code.visualstudio.com/) 推荐使用，轻量便捷、插件丰富，官网免费下载安装
 - 推荐插件（在vscode插件商店中搜索即可）：
   1. **vscode-icons** 美化文件/文件夹图标
   2. **open in browser** 在html文档中右击选择open in default browser即可直接在默认浏览器打开预览你的html文档
@@ -32,7 +33,7 @@
    ![No picture](./assets/images/1.png)
   2. 终端输入`git clone https://github.com/vvvb-github/webGL.git`
    ![No pictrue](./assets/images/2.png)
-  此时可以看到项目已被克隆到本地
+  此时可以看到项目已被克隆到本地，再次File——Open Folder进入到webGL项目目录下即可开始正常工作
 - 项目管理：
   1. **Pull** 当其它协作者修改项目后，可以直接通过Pull操作将更改同步到本地；注意当本地文件的修改与远程仓库中其它协作者的修改产生冲突时会提示合并信息，请谨慎选择。
    ![No pictrue](./assets/images/3.png)
