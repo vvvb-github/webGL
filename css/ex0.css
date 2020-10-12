@@ -1,0 +1,34 @@
+html {
+    width: 100%;
+    height: 95%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#canvas {
+    width: 70%;
+    height: 100%;
+}
+
+#tips {
+    width: 30%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.btn {
+    width: 100px;
+    height: 50px;
+    margin-top: 10px;
+    font-weight: bold;
+}
