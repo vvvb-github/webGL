@@ -4,10 +4,27 @@
     <meta charset="UTF-8">
     <title>WebGL编程的基本模式</title>
     <link rel="stylesheet" type="text/css" href="../css/ex1.css">
+    <script src="../libs/webgl-utils.js"></script>
 </head>
 <body>
 
-    <h1>WebGL编程的基本模式</h1>
+    <canvas id="canvas">
+        <script id="vertex-shader" type="notjs">
+            attribute vec4 a_position;
+
+            void main(){
+                gl_Position = a_position;
+            }
+        </script>
+        <script id="fragment-shader" type="notjs">
+            precision mediump float;
+            uniform vec4 u_color;
+            
+            void main() {
+                gl_FragColor = u_color;
+            }
+        </script>
+    </canvas>
 
     <script src="../js/ex1.js"></script>
     
