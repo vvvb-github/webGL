@@ -35,7 +35,7 @@ window.onload = ()=>{
 
 function drawFace() {
     drawCircleWithBorder(0,360,[0,0],[600,600],[0,0,0.9,0.8]);
-    drawCircleWithBorder(0,360,[0,-150],[500,500],[1,1,1,1]);
+    drawCircleWithBorder(0,360,[0,-130],[500,480],[1,1,1,1]);
 }
 
 function drawEyes() {
