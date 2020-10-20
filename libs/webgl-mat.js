@@ -141,16 +141,3 @@ function unitMat() {
         0,0,0,1
     ];
 }
-
-
-function mt(vec, mat) {
-    let rt = new Array();
-    for(let i=0;i<4;++i) {
-        let tmp = 0;
-        for(let j=0;j<4;++j) {
-            tmp += vec[j]*mat[4*j+i];
-        }
-        rt.push(tmp);
-    }
-    return rt;
-}
