@@ -9,12 +9,11 @@
 
 ### 项目结构说明
 - assets ：存放各类资源，如图片、模型、音效等
-- css ：存放css样式表
-- html ：存放html文档
-- js ：存放javascript脚本
+- ex0-ex4 ：分别对应5次实验
 - libs ：存放一些手搓的简易封装脚本
 - index.html ：网页主页
 - index.css ：主页样式表
+- index.js ：主页业务代码
 
 ### 环境配置
 - [Git](https://git-scm.com/downloads) git管理工具，官网免费下载安装
