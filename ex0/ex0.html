@@ -7,54 +7,10 @@
     <script src="../libs/webgl-utils.js"></script>
     <script src="../libs/webgl-mat.js"></script>
     <script src="../libs/webgl-geometry.js"></script>
+    <script src="../libs/Node.js"></script>
+    <script src="../libs/Scene.js"></script>
 </head>
 <body>
-    <canvas id="canvas">
-        <script id="webgl-vertex" type="notjs">
-            // 一个属性变量，将会从缓冲中获取数据
-            attribute vec4 a_position;
-            attribute vec4 a_color;
-            uniform mat4 u_matrix;
-            varying vec4 v_color;
-           
-            // 所有着色器都有一个main方法
-            void main() {
-                vec4 pos = u_matrix * a_position;
-                float w = 1.0 + pos.z * 1.0;
-                // gl_Position 是一个顶点着色器主要设置的变量
-                gl_Position = vec4(pos.xyz, w);
-                // 将颜色传给片段着色器
-                v_color = a_color;
-            }
-        </script>
-           
-        <script id="webgl-fragment" type="notjs">
-            // 片断着色器没有默认精度，所以我们需要设置一个精度
-            // mediump是一个不错的默认值，代表“medium precision”（中等精度）
-            precision mediump float;
-            varying vec4 v_color;
-            
-            void main() {
-                // gl_FragColor是一个片断着色器主要设置的变量
-                gl_FragColor = v_color;
-            }
-        </script>
-    </canvas>
-
-    <div id="tips">
-        <p>此demo用于练手与测试，并非最终综合实验成品！</p>
-        <button id="x-rotate" class="btn">绕x轴旋转</button>
-        <button id="y-rotate" class="btn">绕y轴旋转</button>
-        <button id="z-rotate" class="btn">绕z轴旋转</button>
-        <button id="up" class="btn">上移</button>
-        <button id="down" class="btn">下移</button>
-        <button id="left" class="btn">左移</button>
-        <button id="right" class="btn">右移</button>
-        <button id="front" class="btn">前移</button>
-        <button id="back" class="btn">后移</button>
-    </div>
-
-    <script src="./ex0.js"></script>
     <script src="../libs/webgl-engine.js"></script>
 </body>
 </html>
