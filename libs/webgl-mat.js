@@ -1,6 +1,7 @@
 // 对于变换矩阵的简易封装
 
 
+const angle1 = Math.PI / 180;
 /**
  * 位移矩阵
  * 
@@ -26,6 +27,7 @@ function moveMat(dx, dy, dz) {
  * @return {Mat} 矩阵
  */
 function rotateMatX(angle) {
+    angle = angle * angle1;
     let s = Math.sin(angle);
     let c = Math.cos(angle);
     return [
@@ -44,12 +46,13 @@ function rotateMatX(angle) {
  * @return {Mat} 矩阵
  */
 function rotateMatY(angle) {
+    angle = angle * angle1;
     let s = Math.sin(angle);
     let c = Math.cos(angle);
     return [
-        c, 0,-s, 0,
+        c, 0, s, 0,
         0, 1, 0, 0,
-        s, 0, c, 0,
+        -s, 0, c, 0,
         0, 0, 0, 1
     ];
 }
@@ -62,6 +65,7 @@ function rotateMatY(angle) {
  * @return {Mat} 矩阵
  */
 function rotateMatZ(angle) {
+    angle = angle * angle1;
     let s = Math.sin(angle);
     let c = Math.cos(angle);
     return [
@@ -100,7 +104,7 @@ function scaleMat(scaleX, scaleY, scaleZ) {
  */
 function multiMat(a, b) {
     let rt = new Array();
-    for(let r=0;r<4;++r) {
+    for(let r=0;r<a.length/4;++r) {
         for(let c=0;c<4;++c) {
             let tmp = 0;
             for(let i=0;i<4;++i) {

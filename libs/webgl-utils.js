@@ -150,3 +150,18 @@ function createProgramFromScripts(gl, vertexShaderId, fragmentShaderId) {
     let fragmentShader = createShaderFromScript(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
     return createProgram(gl, vertexShader, fragmentShader);
 }
+
+
+/**
+ * 通过两段代码文本创建程序
+ * 
+ * @param {!WebGLRenderingContext} gl WebGL上下文。
+ * @param {string} vertexSource 顶点着色器的代码。
+ * @param {string} fragmentSource 片断着色器的代码。
+ * @return {!WebGLProgram} 程序。
+ */
+function createProgramFromText(gl, vertexSource, fragmentSource) {
+    let vertexShader = compileShader(gl, vertexSource, gl.VERTEX_SHADER);
+    let fragmentShader = compileShader(gl, fragmentSource, gl.FRAGMENT_SHADER);
+    return createProgram(gl, vertexShader, fragmentShader);
+}
