@@ -14,10 +14,12 @@ const vertexSource = `
     attribute vec4 a_position;
     attribute vec4 a_color;
     uniform mat4 u_matrix;
+    uniform mat4 u_project;
+    uniform mat4 u_camera;
     varying vec4 v_color;
 
     void main() {
-        vec4 pos = u_matrix * a_position;
+        vec4 pos = u_camera * u_project * u_matrix * a_position;
         pos.w = 1.0 + pos.z;
         v_color = a_color;
 
@@ -58,6 +60,8 @@ window.onload = ()=>{
     resizeCanvasAndFit(gl);
     gl.useProgram(program);
     gl.enable(gl.DEPTH_TEST);
+    gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_project'), false,
+        projectMat(gl.canvas.width, gl.canvas.height, gl.canvas.width));
 
     requestAnimationFrame(drawScene);
 }

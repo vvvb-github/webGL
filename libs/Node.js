@@ -1,5 +1,5 @@
 class Node {
-    constructor(name='node') {
+    constructor(name) {
         this.children = [];
         this.position = {
             x: 0,
@@ -16,18 +16,56 @@ class Node {
             y: 1,
             z: 1
         };
+        this.size = {
+            x: 1,
+            y: 1,
+            z: 1
+        }
+        this.transform = unitMat();
         this.parent = null;
         this.vertices = [];
         this.colors = [];
         this.active = true;
         this.name = name;
-
-        this.start();
     }
 
     addChild(node) {
         node.parent = this;
         this.children.push(node);
+    }
+
+    Resize(x, y, z) {
+        this.size.x *= x;
+        this.size.y *= y;
+        this.size.z *= z;
+    }
+
+    Scale(x, y, z) {
+        this.scale.x *= x;
+        this.scale.y *= y;
+        this.scale.z *= z;
+    }
+
+    Move(x, y, z) {
+        this.transform = multiMat(moveMat(x, y, z), this.transform);
+        this.position.x = this.transform[12];
+        this.position.y = this.transform[13];
+        this.position.z = this.transform[14];
+    }
+
+    RotateX(angle) {
+        this.rotation.x += angle;
+        this.transform = multiMat(rotateMatX(angle), this.transform);
+    }
+
+    RotateY(angle) {
+        this.rotation.y += angle;
+        this.transform = multiMat(rotateMatY(angle), this.transform);
+    }
+
+    RotateZ(angle) {
+        this.rotation.z += angle;
+        this.transform = multiMat(rotateMatZ(angle), this.transform);
     }
 
     getChildByName(name) {
@@ -47,13 +85,10 @@ class Node {
         this.update(dt);
         // 计算总变换矩阵
         let mat = scaleMat(this.scale.x, this.scale.y, this.scale.z);
-        mat = multiMat(mat, rotateMatX(this.rotation.x));
-        mat = multiMat(mat, rotateMatY(this.rotation.y));
-        mat = multiMat(mat, rotateMatZ(this.rotation.z));
-        mat = multiMat(mat, moveMat(this.position.x, this.position.y, this.position.z));
+        mat = multiMat(mat, this.transform);
         mat = multiMat(mat, trans);
         gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_matrix'), false, 
-                multiMat(mat, projectMat(gl.canvas.width, gl.canvas.height, gl.canvas.width)));
+                multiMat(scaleMat(this.size.x, this.size.y, this.size.z), mat));
         this.draw();
         // 子节点递归更新
         this.children.forEach(child=>{child.updateFrame(dt, mat)});
@@ -65,8 +100,6 @@ class Node {
 
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 3);
     }
-
-    start() {}
 
     update(dt) {}
 }

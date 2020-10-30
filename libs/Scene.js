@@ -1,6 +1,6 @@
 class Scene extends Node {
-    start() {
-        console.log(gl);
+    constructor() {
+        super('scene');
     }
 
     updateFrame(dt, trans) {
