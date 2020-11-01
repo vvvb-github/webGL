@@ -27,6 +27,12 @@ class Camera extends Node {
     }
 
     updateFrame(dt, trans) {
+        this.update(dt);
+
         gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_camera'), false, this.reverse);
+        this.children.forEach((child,index)=>{
+            if(!child.live) this.children.splice(index,1);
+            else child.updateFrame(dt, this.transform);
+        });
     }
 }

@@ -6,6 +6,7 @@
 ### 参考资源
 - [webGL教程](https://webglfundamentals.org/)
 - [html/css/javascript教程](https://www.runoob.com/)
+- [RGB表](http://www.ilikeseo.cn/wangzhanyingxiaozhishi_30.html)
 
 ### 项目结构说明
 - assets ：存放各类资源，如图片、模型、音效等

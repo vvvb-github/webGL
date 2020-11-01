@@ -1,16 +1,16 @@
 class Node {
     constructor(name) {
         this.children = [];
-        this.position = {
-            x: 0,
-            y: 0,
-            z: 0
-        };
-        this.rotation = {
-            x: 0,
-            y: 0,
-            z: 0
-        };
+        // this.position = {
+        //     x: 0,
+        //     y: 0,
+        //     z: 0
+        // };
+        // this.rotation = {
+        //     x: 0,
+        //     y: 0,
+        //     z: 0
+        // };
         this.scale = {
             x: 1,
             y: 1,
@@ -26,12 +26,28 @@ class Node {
         this.vertices = [];
         this.colors = [];
         this.active = true;
+        this.live = true;
         this.name = name;
     }
 
     addChild(node) {
         node.parent = this;
         this.children.push(node);
+    }
+
+    getChildByName(name) {
+        if(this.name === name) return this;
+        else {
+            for(let i=0;i<this.children.length;++i) {
+                let res = this.children[i].getChildByName(name);
+                if(res) return res;
+            }
+        }
+        return null;
+    }
+
+    destroy() {
+        this.live = false;
     }
 
     Resize(x, y, z) {
@@ -48,35 +64,42 @@ class Node {
 
     Move(x, y, z) {
         this.transform = multiMat(moveMat(x, y, z), this.transform);
-        this.position.x = this.transform[12];
-        this.position.y = this.transform[13];
-        this.position.z = this.transform[14];
+        // this.position.x = this.transform[12];
+        // this.position.y = this.transform[13];
+        // this.position.z = this.transform[14];
     }
 
     RotateX(angle) {
-        this.rotation.x += angle;
+        // this.rotation.x += angle;
         this.transform = multiMat(rotateMatX(angle), this.transform);
     }
 
     RotateY(angle) {
-        this.rotation.y += angle;
+        // this.rotation.y += angle;
         this.transform = multiMat(rotateMatY(angle), this.transform);
     }
 
     RotateZ(angle) {
-        this.rotation.z += angle;
+        // this.rotation.z += angle;
         this.transform = multiMat(rotateMatZ(angle), this.transform);
     }
 
-    getChildByName(name) {
-        if(this.name === name) return this;
+    getTransform() {
+        if(!this.parent) return this.transform;
         else {
-            for(let i=0;i<this.children.length;++i) {
-                let res = this.children[i].getChildByName(name);
-                if(res) return res;
-            }
+            let trans = this.parent.getTransform();
+            let mat = scaleMat(this.scale.x, this.scale.y, this.scale.z);
+            mat = multiMat(mat, this.transform);
+            return multiMat(mat, trans);
         }
-        return null;
+    }
+
+    addTransform(trans) {
+        this.transform = multiMat(this.transform, trans);
+    }
+
+    setTransform(trans) {
+        this.transform = trans;
     }
 
     updateFrame(dt, trans) {
@@ -91,7 +114,10 @@ class Node {
                 multiMat(scaleMat(this.size.x, this.size.y, this.size.z), mat));
         this.draw();
         // 子节点递归更新
-        this.children.forEach(child=>{child.updateFrame(dt, mat)});
+        this.children.forEach((child,index)=>{
+            if(!child.live) this.children.splice(index,1);
+            else child.updateFrame(dt, mat);
+        });
     }
 
     draw() {

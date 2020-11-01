@@ -5,6 +5,9 @@ class Scene extends Node {
 
     updateFrame(dt, trans) {
         clearCanvas(gl);
-        this.children.forEach(child=>{child.updateFrame(dt, trans)});
+        this.children.forEach((child,index)=>{
+            if(!child.live) this.children.splice(index,1);
+            else child.updateFrame(dt, trans);
+        });
     }
 }

@@ -6,6 +6,7 @@ const gl = canvas.getContext('webgl');
 let program = null;
 const scene = new Scene();
 const camera = new Camera(gl);
+const event_sys = new EventSystem();
 scene.addChild(camera);
 let then = 0;
 
@@ -19,11 +20,14 @@ const vertexSource = `
     varying vec4 v_color;
 
     void main() {
-        vec4 pos = u_camera * u_project * u_matrix * a_position;
-        pos.w = 1.0 + pos.z;
         v_color = a_color;
+        vec4 pos = u_camera * u_matrix * a_position;
 
-        gl_Position = pos;
+        if(pos.z <= 0.0) {
+            gl_Position = u_project * vec4(pos.x * 10000.0, pos.y * 10000.0, pos.zw);
+        } else {
+            gl_Position = u_project * vec4(pos.x/pos.z, pos.y/pos.z, pos.zw);
+        }
     }
 `;
 const fragmentSource = `
@@ -60,8 +64,8 @@ window.onload = ()=>{
     resizeCanvasAndFit(gl);
     gl.useProgram(program);
     gl.enable(gl.DEPTH_TEST);
-    gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_project'), false,
-        projectMat(gl.canvas.width, gl.canvas.height, gl.canvas.width));
+    gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_project'),false,
+                projectMat(60,gl.canvas.width,gl.canvas.height,0,10000));
 
     requestAnimationFrame(drawScene);
 }
