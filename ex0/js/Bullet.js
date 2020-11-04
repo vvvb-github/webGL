@@ -5,7 +5,7 @@ class Bullet extends Node {
         this.vertices = geo_Cube(2.5);
         this.Resize(1,1,2);
         for(let i=0;i<this.vertices.length;++i) {
-            this.colors.push(1,1,0,1);
+            this.colors.push(1,0,0,1);
         }
         this.speed = 1000;
         this.lifetime = 0;
