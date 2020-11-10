@@ -4,6 +4,7 @@ class Camera extends Node {
 
         this.gl = gl;
         this.reverse = unitMat();
+        this.enabled = false;
     }
 
     Move(x, y, z) {
@@ -26,13 +27,15 @@ class Camera extends Node {
         this.reverse = multiMat(this.reverse, rotateMatZ(-angle));
     }
 
-    updateFrame(dt, trans) {
+    updateFrame(dt, trans, hide) {
         this.update(dt);
 
-        gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_camera'), false, this.reverse);
+        if(this.enabled)
+            gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_camera'), false, this.reverse);
         this.children.forEach((child,index)=>{
             if(!child.live) this.children.splice(index,1);
-            else child.updateFrame(dt, this.transform);
+            else child.updateFrame(dt, this.transform, hide);
         });
     }
+
 }

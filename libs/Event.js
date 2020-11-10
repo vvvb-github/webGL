@@ -47,7 +47,8 @@ class EventSystem {
             W: ()=>{return this.keyTable[87]},
             X: ()=>{return this.keyTable[88]},
             Y: ()=>{return this.keyTable[89]},
-            Z: ()=>{return this.keyTable[90]}
+            Z: ()=>{return this.keyTable[90]},
+            Shift: ()=>{return this.keyTable[16]}
         }
 
         document.onkeydown = ev=>{

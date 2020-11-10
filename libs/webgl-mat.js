@@ -148,3 +148,12 @@ function unitMat() {
         0,0,0,1
     ];
 }
+
+/**
+ * 向量数乘
+ * 
+ * @return {Vector} 向量
+ */
+function numMul(x, y) {
+    return x.map(x => x * y);
+}

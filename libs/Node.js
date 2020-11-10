@@ -28,6 +28,7 @@ class Node {
         this.active = true;
         this.live = true;
         this.name = name;
+        this.visible = true;
     }
 
     addChild(node) {
@@ -62,26 +63,51 @@ class Node {
         this.scale.z *= z;
     }
 
+    BindCamera(camera, preMove) {
+        camera.Move(...preMove);
+        this.bindedCamera = camera;
+        this.preMove = preMove;
+        this.revMove = numMul(preMove, -1);
+    }
+
     Move(x, y, z) {
         this.transform = multiMat(moveMat(x, y, z), this.transform);
         // this.position.x = this.transform[12];
         // this.position.y = this.transform[13];
         // this.position.z = this.transform[14];
+        if (this.bindedCamera) {
+            this.bindedCamera.Move(x, y, z);
+        }
     }
 
     RotateX(angle) {
         // this.rotation.x += angle;
         this.transform = multiMat(rotateMatX(angle), this.transform);
+        if (this.bindedCamera) {
+            this.bindedCamera.Move(...this.revMove);
+            this.bindedCamera.RotateX(angle);
+            this.bindedCamera.Move(...this.preMove);
+        }
     }
 
     RotateY(angle) {
         // this.rotation.y += angle;
         this.transform = multiMat(rotateMatY(angle), this.transform);
+        if (this.bindedCamera) {
+            this.bindedCamera.Move(...this.revMove);
+            this.bindedCamera.RotateY(angle);
+            this.bindedCamera.Move(...this.preMove);
+        }
     }
 
     RotateZ(angle) {
         // this.rotation.z += angle;
         this.transform = multiMat(rotateMatZ(angle), this.transform);
+        if (this.bindedCamera) {
+            this.bindedCamera.Move(...this.revMove);
+            this.bindedCamera.RotateZ(angle);
+            this.bindedCamera.Move(...this.preMove);
+        }
     }
 
     getTransform() {
@@ -112,7 +138,7 @@ class Node {
         mat = multiMat(mat, trans);
         gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_matrix'), false, 
                 multiMat(scaleMat(this.size.x, this.size.y, this.size.z), mat));
-        this.draw();
+        if (this.visible) this.draw();
         // 子节点递归更新
         this.children.forEach((child,index)=>{
             if(!child.live) this.children.splice(index,1);
@@ -121,6 +147,8 @@ class Node {
     }
 
     draw() {
+        
+        // addDrawTask(this.vertices, this.colors);
         setAttrib('a_position', this.vertices, 3);
         setAttrib('a_color', this.colors, 4);
 

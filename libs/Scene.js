@@ -3,11 +3,11 @@ class Scene extends Node {
         super('scene');
     }
 
-    updateFrame(dt, trans) {
+    updateFrame(dt, trans, hide) {
         clearCanvas(gl);
         this.children.forEach((child,index)=>{
             if(!child.live) this.children.splice(index,1);
-            else child.updateFrame(dt, trans);
+            else child.updateFrame(dt, trans, hide);
         });
     }
 }
