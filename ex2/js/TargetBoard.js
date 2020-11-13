@@ -161,7 +161,7 @@ class Target extends Node {
         // console.log(lx,lz,vx,vz,time);
         if(time<0)return time;
         lx += vx * time;
-        if(Math.abs(lx-locationX)<=75){
+        if(Math.abs(lx-locationX)<=55){
             //this.hitedTime = -time*1000;
             return time*1000;
         }

@@ -93,7 +93,7 @@ class Arm extends Cube {
             // 更新射击间隔，播放音效
             this.shotTime = 0;
             this.audio = document.createElement('audio');
-            this.audio.src = '../ex0/audios/shot.wav';
+            this.audio.src = '../ex2/audios/shot.wav';
             this.audio.play();
 
             let mat = multiMat(moveMat(0, 0, bullet.speed), bullet.getTransform());
@@ -190,7 +190,9 @@ document.addEventListener('keypress', event=> {
         camera_1.enabled = !camera_1.enabled;
         camera_3.enabled = !camera_3.enabled;
         head.visible = !head.visible;
-    } else if(event.key.toLowerCase() === 'j') {
+    } 
+    
+    else if(event.key.toLowerCase() === 'j') {
         if (player.jumping) return;
         player.jumping = true;
         player.heightSpeed = 15;
@@ -198,6 +200,7 @@ document.addEventListener('keypress', event=> {
 });
 
 player.RotateX(2);
+
 
 document.addEventListener('click',event=> {
     console.log("clicked");

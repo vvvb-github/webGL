@@ -44,11 +44,9 @@ function drawCircleRingY(start, end, center, range){//在zox平面画环
     }
     return vertices;
 }
-function drawRingY3D(centerA, rangeA, centerB, rangeB){//用两个平面环画出一个立体环
+function drawRingY3D(centerA, rangeA, centerB, rangeB){
     let verticesA = drawCircleRingY(0,360,centerA,rangeA);
     let verticesB = drawCircleRingY(0,360,centerB,rangeB);
-    // console.log(verticesA);
-    // console.log(verticesB);
     let n = verticesA.length;
     let vertices = new Array();
     for(let i=0;i<n;i+=3){
@@ -59,7 +57,6 @@ function drawRingY3D(centerA, rangeA, centerB, rangeB){//用两个平面环画�
         vertices.push(verticesB[i+1]);
         vertices.push(verticesB[i+2]);
     }
-    // console.log("the total length of Ring is: " + vertices.length/3);
     return vertices;
 }
 function drawSphereY(start, end, range){//沿着y轴用圆环堆砌成圆 start,end ∈[-1,1]
@@ -93,15 +90,12 @@ function drawBallon(){
     let step = height / 30;
     let vertices = new Array();
     for(let y = 0; y < height; y += step){
-        
         let rangeA = ballonSkeleton(y);
-        // console.log(y+": " + rangeA)
         let ny = y + step;
         let rangeB = ballonSkeleton(ny);
         let temp = drawRingY3D([0,y,0], rangeA, [0,ny,0], rangeB);
         for(let i = 0;i < temp.length;i++)
             vertices.push(temp[i]);
     }
-    // console.log(vertices);
     return vertices;
 }

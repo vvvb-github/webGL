@@ -30,6 +30,7 @@ const vertexSource = `
         } else {
             gl_Position = u_project * vec4(pos.x/pos.z, pos.y/pos.z, pos.zw);
         }
+        
     }
 `;
 const fragmentSource = `
