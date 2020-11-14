@@ -5,11 +5,9 @@ canvas.style.height = '100%';
 const gl = canvas.getContext('webgl');
 let program = null;
 const scene = new Scene();
-const camera_3 = new Camera(gl);
-const camera_1 = new Camera(gl);
+const camera = new Camera();
 const event_sys = new EventSystem();
-scene.addChild(camera_3);
-scene.addChild(camera_1);
+scene.addChild(camera);
 let then = 0;
 
 const vertexSource = `
@@ -42,26 +40,8 @@ const fragmentSource = `
     }
 `;
 
-// let allVec = [];
-// let allColor = [];
-
-// function addDrawTask(vectex, color) {
-//     for(let x of vectex) allVec.push(x);
-//     for(let x of color) allColor.push(x);
-// }
-
-// function applyDrawTask() {
-//     setAttrib('a_position', allVec, 3);
-//     setAttrib('a_color', allColor, 4);
-//     gl.drawArrays(gl.TRIANGLES, 0, allVec.length / 3);
-//     allVec = [];
-//     allColor = [];
-// }
-
-
 function drawScene(now) {
-    scene.updateFrame(now - then, unitMat(), false);
-    // applyDrawTask();
+    scene.updateFrame(now - then, unitMat());
     then = now;
     requestAnimationFrame(drawScene);
 }

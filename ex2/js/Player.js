@@ -123,8 +123,6 @@ class Arm extends Cube {
                 }
             }
 
-
-
             this.parent.curSpeed -= 0.3;
             this.parent.jumping = true;
             this.parent.heightSpeed = 1;
@@ -157,12 +155,19 @@ class HeadRing extends Node {
         //  this.Resize(5,5,5);
     }
 }
+camera.destroy();
+const camera_3 = new Camera();
+const camera_1 = new Camera();
+camera_1.active = false;
+scene.addChild(camera_3);
 // 调整摄像机视角，后移400，上移200，20°俯视视角
 camera_3.Move(0,200,-400);
 camera_3.RotateX(20);
 // 小人身体
 let player = new Player('player');
 scene.addChild(player);
+player.addChild(camera_1);
+camera_1.Move(0,75,45);
 // 头部
 let head = new Cube('head');
 head.Resize(25,25,25);
@@ -177,8 +182,6 @@ player.addChild(larm);
 let rarm = new Arm('rarm');
 rarm.Move(55,30,40);
 player.addChild(rarm);
-player.BindCamera(camera_1,[0,80,20])
-camera_3.enabled = true;
 
 let headring = new HeadRing("headring");
 head.addChild(headring);
@@ -187,8 +190,8 @@ headring.Move(0,25,0);
 
 document.addEventListener('keypress', event=> {
     if (event.key.toLowerCase() === 'y') {
-        camera_1.enabled = !camera_1.enabled;
-        camera_3.enabled = !camera_3.enabled;
+        camera_1.active = !camera_1.active;
+        camera_3.active = !camera_3.active;
         head.visible = !head.visible;
     } 
     
@@ -200,7 +203,6 @@ document.addEventListener('keypress', event=> {
 });
 
 player.RotateX(2);
-
 
 document.addEventListener('click',event=> {
     console.log("clicked");
