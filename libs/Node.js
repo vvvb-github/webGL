@@ -24,7 +24,9 @@ class Node {
         this.transform = unitMat();
         this.parent = null;
         this.vertices = [];
+        this.normals = [];
         this.colors = [];
+        this.smooth = 0;
         this.active = true;
         this.live = true;
         this.name = name;
@@ -124,6 +126,8 @@ class Node {
     draw() {
         setAttrib('a_position', this.vertices, 3);
         setAttrib('a_color', this.colors, 4);
+        setAttrib('a_normal', this.normals, 3);
+        gl.uniform1f(gl.getUniformLocation(program,'u_smooth'), this.smooth);
 
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 3);
     }

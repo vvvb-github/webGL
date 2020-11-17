@@ -3,42 +3,21 @@ document.querySelector('body').appendChild(canvas);
 canvas.style.width = '100%';
 canvas.style.height = '100%';
 const gl = canvas.getContext('webgl');
-let program = null;
+
+const shaderSource = lightShader;
+const program = createProgramFromText(gl, shaderSource.vertexSource, shaderSource.fragmentSource);
+gl.useProgram(program);
+resizeCanvasAndFit(gl);
+gl.enable(gl.DEPTH_TEST);
+gl.uniform1i(gl.getUniformLocation(program,'u_lightCount'), 0);
+gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_project'),false,
+            projectMat(60,gl.canvas.width,gl.canvas.height,0,10000));
+
 const scene = new Scene();
 const camera = new Camera();
 const event_sys = new EventSystem();
 scene.addChild(camera);
 let then = 0;
-
-const vertexSource = `
-    precision mediump float;
-    attribute vec4 a_position;
-    attribute vec4 a_color;
-    uniform mat4 u_matrix;
-    uniform mat4 u_project;
-    uniform mat4 u_camera;
-    varying vec4 v_color;
-
-    void main() {
-        v_color = a_color;
-        vec4 pos = u_camera * u_matrix * a_position;
-
-        if(pos.z <= 0.0) {
-            gl_Position = u_project * vec4(pos.x * 10000.0, pos.y * 10000.0, pos.zw);
-        } else {
-            gl_Position = u_project * vec4(pos.x/pos.z, pos.y/pos.z, pos.zw);
-        }
-        
-    }
-`;
-const fragmentSource = `
-    precision mediump float;
-    varying vec4 v_color;
-
-    void main() {
-        gl_FragColor = v_color;
-    }
-`;
 
 function drawScene(now) {
     scene.updateFrame(now - then, unitMat());
@@ -60,12 +39,6 @@ window.onload = ()=>{
         console.log('Cannot support webgl!');
         return;
     }
-    program = createProgramFromText(gl, vertexSource, fragmentSource);
-    resizeCanvasAndFit(gl);
-    gl.useProgram(program);
-    gl.enable(gl.DEPTH_TEST);
-    gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_project'),false,
-                projectMat(60,gl.canvas.width,gl.canvas.height,0,10000));
 
     requestAnimationFrame(drawScene);
 }
