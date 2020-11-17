@@ -11,7 +11,7 @@ resizeCanvasAndFit(gl);
 gl.enable(gl.DEPTH_TEST);
 gl.uniform1i(gl.getUniformLocation(program,'u_lightCount'), 0);
 gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_project'),false,
-            projectMat(60,gl.canvas.width,gl.canvas.height,0,10000));
+            projectMat(90,gl.canvas.width/gl.canvas.height,1,10000));
 
 const scene = new Scene();
 const camera = new Camera();

@@ -1,35 +1,3 @@
-const normalShader = {
-    vertexSource: `
-        precision mediump float;
-        attribute vec4 a_position;
-        attribute vec4 a_color;
-        uniform mat4 u_matrix;
-        uniform mat4 u_project;
-        uniform mat4 u_camera;
-        varying vec4 v_color;
-
-        void main() {
-            v_color = a_color;
-            vec4 pos = u_camera * u_matrix * a_position;
-
-            if(pos.z <= 0.0) {
-                gl_Position = u_project * vec4(pos.x * 10000.0, pos.y * 10000.0, pos.zw);
-            } else {
-                gl_Position = u_project * vec4(pos.x/pos.z, pos.y/pos.z, pos.zw);
-            }
-            
-        }
-    `,
-    fragmentSource: `
-        precision mediump float;
-        varying vec4 v_color;
-
-        void main() {
-            gl_FragColor = v_color;
-        }
-    `
-};
-
 const lightShader = {
     vertexSource: `
         precision mediump float;
@@ -52,11 +20,9 @@ const lightShader = {
             v_color = a_color;
             vec4 pos = u_camera * u_matrix * a_position;
 
-            if(pos.z <= 0.0) {
-                gl_Position = u_project * vec4(pos.x * 10000.0, pos.y * 10000.0, pos.zw);
-            } else {
-                gl_Position = u_project * vec4(pos.x/pos.z, pos.y/pos.z, pos.zw);
-            }
+            gl_Position = u_project * vec4(pos.xy, -pos.z, pos.w);
+
+            if(u_lightCount <= 0) return;
             
             vec4 clr = vec4(0.0, 0.0, 0.0, 1.0);
             for(int i=0;i<10;i++) {

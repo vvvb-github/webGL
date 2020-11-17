@@ -40,10 +40,12 @@
     <script src="../libs/webgl-utils.js"></script>
     <script src="../libs/webgl-mat.js"></script>
     <script src="../libs/webgl-geometry.js"></script>
+    <script src="../libs/webgl-shader.js"></script>
     <script src="../libs/Event.js"></script>
     <script src="../libs/Node.js"></script>
     <script src="../libs/Scene.js"></script>
     <script src="../libs/Camera.js"></script>
+    <script src="../libs/Light.js"></script>
 </head>
 <body>
     <script src="../libs/webgl-engine.js"></script>
@@ -99,11 +101,13 @@ class MyObject extends Node {
     draw() {
         setAttrib('a_position', this.vertices, 3);
         setAttrib('a_color', this.colors, 4);
+        setAttrib('a_normal', this.normals, 3);
+        gl.uniform1f(gl.getUniformLocation(program,'u_smooth'), this.smooth);
 
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 3);
     }
     ```
-该方法将顶点与颜色序列均传给着色器，并使用`gl.TRIANGLES`方法进行绘制。
+该方法将顶点、法向量、颜色序列以及光滑度（用于高光反射）均传给着色器，并使用`gl.TRIANGLES`方法进行绘制。
 当然，你的物体并非必须严格继承自`Node`，也可以继承自你自定义的其它物品类，你所需要确保的是物体最底层的基类是`Node`即可。
 #### 锚点
 锚点简单的理解即为物体的中心，在引擎中你对某个物体所做的所有变换都是基于锚点进行的，因此锚点的选定非常重要。引擎中，为了简化顶点坐标的计算，我们规定了所有物体的初始锚点坐标始终位于原点。因此在给物体的`vertices`初始化时应当确保所有顶点都是以原点作为锚点的相对坐标。例如，一个以体中心为锚点的边长为2的立方体，其顶点坐标为(±1,±1,±1)，而以底面中心为锚点的立方体顶点坐标则变为(±1,±1,0|2)。
@@ -114,6 +118,8 @@ class MyObject extends Node {
 ```javascript
     Node.vertices;  // 顶点序列
     Node.colors;  // 颜色序列
+    Node.normals;  // 物体表面法向量
+    Node.smooth;  // 物体光滑（高光）度，默认为0
     Node.active;  // 是否处于激活状态，若为false则自身包括所有子物体均不会被绘制
     Node.visible;  // 是否可见，若为false则不会调用draw()进行绘制
     Node.name;  // 物体名称
@@ -159,3 +165,19 @@ myNode.addChild(new MyCamera('camera'));  // 添加你的相机到某个物体�
 引擎已经封装了一套相对完善的键盘响应系统。你可以通过全局变量`event_sys`获取事件系统，并通过`event_sys.keyBoard.Key()`来获取按键`Key`是否处于按下状态。请注意此处`Key`代指接口函数名，其可选值请参考`libs/Event.js`中`keyBoard`的定义。
 2. 鼠标事件
 尚未封装。
+
+#### 光照系统
+**点光源**
+点光源已在Light.js中进行了简单封装。你可以像创建普通物体一般创建点光源
+```javascript
+/**
+ * @param {Array} lightColor 光源颜色
+ * @param {Number} brightness 光源亮度，范围[0,1]
+ **/
+let point_light = new PointLight(lightColor, brightness);
+point_light.Move(dx, dy, dz);
+...
+scene.addChild(point_light);  // other_node.addChild(point_light)
+```
+请注意，当你在场景中加入光源后，请务必确保你场景内的所有物体均设置了 ***法向量*** ，否则将会出错；目前着色器中仅允许存放至多10个点光源，因此请不要创建过多光源。
+此外，`Node`中有一个光滑度（高光敏感度）`Node.smooth`，默认值为0.你可以通过设置该变量（范围[0,1]）来增强物体表面的高光反射。光滑度越大，物体对光线的反射能力就越强。当光滑度为0时，物体便不会反光，仅仅受到明暗的影响。

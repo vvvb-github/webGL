@@ -122,15 +122,15 @@ function multiMat(a, b) {
  * 
  * @return {Mat} 矩阵
  */
-function projectMat(theta, width, height, near, far) {
-    let t = 1 / Math.tan(theta/180*Math.PI);
-    let f = 2 / (far - near);
-
+function projectMat(fieldOfViewInRadians, aspect, near, far) {
+    let f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+    let rangeInv = 1.0 / (near - far);
+ 
     return [
-        height/width*t,0,0,0,
-        0,t,0,0,
-        0,0,f,0,
-        0,0,-f*near-1,1
+        f / aspect, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (near + far) * rangeInv, -1,
+        0, 0, near * far * rangeInv * 2, 0
     ];
 }
 

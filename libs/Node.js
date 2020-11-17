@@ -1,16 +1,6 @@
 class Node {
     constructor(name) {
         this.children = [];
-        // this.position = {
-        //     x: 0,
-        //     y: 0,
-        //     z: 0
-        // };
-        // this.rotation = {
-        //     x: 0,
-        //     y: 0,
-        //     z: 0
-        // };
         this.scale = {
             x: 1,
             y: 1,
@@ -67,23 +57,17 @@ class Node {
 
     Move(x, y, z) {
         this.transform = multiMat(moveMat(x, y, z), this.transform);
-        // this.position.x = this.transform[12];
-        // this.position.y = this.transform[13];
-        // this.position.z = this.transform[14];
     }
 
     RotateX(angle) {
-        // this.rotation.x += angle;
         this.transform = multiMat(rotateMatX(angle), this.transform);
     }
 
     RotateY(angle) {
-        // this.rotation.y += angle;
         this.transform = multiMat(rotateMatY(angle), this.transform);
     }
 
     RotateZ(angle) {
-        // this.rotation.z += angle;
         this.transform = multiMat(rotateMatZ(angle), this.transform);
     }
 
