@@ -5,52 +5,14 @@ class Planet extends Node {
         this.vertices = drawSphereY(-1, 1, r);
         this.normals = this.vertices;
         
-        this.texture = new Image(16,16);
+        this.texture = new Image();
         this.texture.crossOrigin = 'anonymous';
         this.texture.src = src;
-        
-        let tpi = 2*Math.PI;
-        for(let i=0;i<this.vertices.length;i+=3) {
-            let x=this.vertices[i], y=this.vertices[i+1], z=this.vertices[i+2];
-            let c = Math.acos(y/Math.sqrt(x*x+y*y+z*z));
-            c = Math.acos(z/r/Math.sin(c));
-            if(!c) c=0;
-            if(x<0) c = tpi - c;
-            this.texcoords.push(c/tpi);
-            c = Math.acos(-y/Math.sqrt(x*x+y*y+z*z));
-            this.texcoords.push(c/Math.PI);
-        }
+        this.texcoords = SphereAngle(-1, 1, r);
+        console.log(this.texcoords);
+        this.drawWay = gl.TRIANGLE_STRIP;
 
         this.self_rotspeed = spd_self;
-    }
-
-    draw() {
-        setAttrib('a_position', this.vertices, 3);
-
-        if(this.texture) {
-            setAttrib('a_texcoord', this.texcoords, 2);
-            gl.uniform1i(gl.getUniformLocation(program,'u_usetexture'), 1);
-
-            gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, this.texture);
-            
-            let w = this.texture.width, h = this.texture.height;
-            if ((w&(w-1)==0) && (h&(h-1)==0)) {
-                gl.generateMipmap(gl.TEXTURE_2D);
-            } else {
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            }
-        } else {
-            setAttrib('a_color', this.colors, 4);
-            gl.uniform1i(gl.getUniformLocation(program,'u_usetexture'), 0);
-        }
-
-        setAttrib('a_normal', this.normals, 3);
-        gl.uniform1f(gl.getUniformLocation(program,'u_smooth'), this.smooth);
-
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vertices.length / 3);
     }
 
     update(dt) {

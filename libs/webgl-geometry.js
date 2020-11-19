@@ -155,3 +155,47 @@ function drawSphereY(start, end, range){//沿着y轴用圆环堆砌成圆 start,
     }
     return vertices;
 }
+function CircleRingYAngle(start, end, center, range){
+    let vertices = new Array();
+    let k = 10;
+    let curAngle = 0;
+    let angle = 1/180*Math.PI * k;
+    let frequency = (end - start) / k;
+    for(let i=0;i<=frequency;++i) {
+        vertices.push(curAngle);
+        curAngle += angle;
+    }
+    return vertices;
+}
+function RingY3DAngle(centerA, rangeA, centerB, rangeB){
+    let verticesA = CircleRingYAngle(0,360,centerA,rangeA);
+    let verticesB = CircleRingYAngle(0,360,centerB,rangeB);
+    let n = verticesA.length;
+    let vertices = new Array();
+    for(let i=0;i<n;i++){
+        vertices.push(verticesA[i]);
+        vertices.push(verticesB[i]);
+    }
+    return vertices;
+}
+function SphereAngle(start, end, range){
+    let l = start * range, r = end * range;
+    let step = (r-l) / 40;
+    let vertices = new Array();
+    for(let y = l;y < r; y += step){
+        let rangeA = Math.sqrt(range * range - y*y);
+        let AngleA = Math.acos(y/range);
+        let ny = y + step;
+        let rangeB = Math.sqrt(range * range - ny*ny);
+        let AngleB = Math.acos(ny/range);
+        let temp = RingY3DAngle([0,y,0], rangeA, [0,ny,0], rangeB);
+        let invPi = 1/Math.PI;
+        for(let i = 0;i < temp.length;i+=2){
+            vertices.push(temp[i]*invPi*0.5);
+            vertices.push(AngleA*invPi);
+            vertices.push(temp[i+1]*invPi*0.5);
+            vertices.push(AngleB*invPi);
+        }   
+    }
+    return vertices;
+}

@@ -28,6 +28,7 @@ const lightShader = {
             vec4 color;
             if(u_usetexture == 0) color = a_color;
             else color = texture2D(u_texture, a_texcoord);
+            v_color = color;
 
             if(u_lightCount <= 0) return;
             vec4 clr = vec4(0.0, 0.0, 0.0, 1.0);
