@@ -8,6 +8,10 @@ const lightShader = {
         uniform mat4 u_project;
         uniform mat4 u_camera;
 
+        attribute vec2 a_texcoord;
+        uniform sampler2D u_texture;
+        uniform int u_usetexture;
+
         uniform float u_smooth;
         uniform mat4 u_lightMat[10];
         uniform vec3 u_lightColor[10];
@@ -17,17 +21,19 @@ const lightShader = {
         varying vec4 v_color;
 
         void main() {
-            v_color = a_color;
             vec4 pos = u_camera * u_matrix * a_position;
 
             gl_Position = u_project * vec4(pos.xy, -pos.z, pos.w);
 
+            vec4 color;
+            if(u_usetexture == 0) color = a_color;
+            else color = texture2D(u_texture, a_texcoord);
+
             if(u_lightCount <= 0) return;
-            
             vec4 clr = vec4(0.0, 0.0, 0.0, 1.0);
             for(int i=0;i<10;i++) {
                 if(i>=u_lightCount) break;
-                v_color = a_color;
+                v_color = color;
                 vec4 lightpos = u_camera * u_lightMat[i] * vec4(0.0, 0.0, 0.0, 1.0);
                 vec3 lightdir = normalize(lightpos.xyz - pos.xyz);
                 vec4 normals = u_camera * u_matrix * a_normal;
@@ -35,7 +41,7 @@ const lightShader = {
                 vec3 normal = normalize(normals.xyz);
 
                 float light = dot(lightdir, normal);
-                v_color.rgb *= light * u_brightness[i] * u_lightColor[i];
+                v_color.rgb *= light * u_brightness[i];
 
                 vec3 cameradir = -normalize(pos.xyz);
                 vec3 middle = normalize(cameradir + lightdir);
