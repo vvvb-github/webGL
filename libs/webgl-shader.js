@@ -16,6 +16,7 @@ const lightShader = {
         varying vec3 u_Ka;
         varying vec3 u_Ks;
         varying vec3 u_Kd;
+        varying mat4 v_camera;
 
         void main() {
             vec4 pos = u_camera * u_matrix * a_position;
@@ -27,7 +28,8 @@ const lightShader = {
             u_Kd = a_diffuse;
             
             v_position = pos; 
-            v_normal = a_normal;
+            v_normal = (u_camera * u_matrix * a_normal) - (u_camera * u_matrix * vec4(0.0,0.0,0.0,1.0));
+            v_camera = u_camera;
         }
     `,
     fragmentSource: `
@@ -43,13 +45,13 @@ const lightShader = {
         varying vec3 u_Kd;
         varying vec3 u_Ks;
         varying vec3 u_Ka;
-
+        varying mat4 v_camera;
 
         void main() {
             float a = 1.0;
             float b = 0.0;
             float c = 0.0;
-            vec3 l = vec3((u_lightMat * vec4(0.0,0.0,0.0,1.0) - v_position).xyz);
+            vec3 l = vec3((v_camera * u_lightMat * vec4(0.0,0.0,0.0,1.0) - v_position).xyz);
             float d2 = dot(l, l);
             l = normalize(l);
             vec3 v = vec3((-v_position).xyz);

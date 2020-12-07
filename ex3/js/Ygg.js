@@ -7,22 +7,22 @@ class YggBody extends Node {
 
     //场景漫游
     update(dt) {
-        // //w键前进
-        // if(event_sys.keyBoard.W()) {
-        //     this.Move(0,0, this.moveSpeed*dt/1000);
-        // }
-        // //s键后退
-        // else if(event_sys.keyBoard.S()) {
-        //     this.Move(0,0, -this.moveSpeed*dt/1000);
-        // }
-        // //a键左移
-        // else if(event_sys.keyBoard.A()){
-        //     this.Move(-this.moveSpeed*dt/1000,0,0);
-        // }
-        // //d键右移
-        // else if(event_sys.keyBoard.D()){
-        //     this.Move(this.moveSpeed*dt/1000,0,0);
-        // }
+        //i键前进
+        if(event_sys.keyBoard.I()) {
+            this.Move(0,0, this.moveSpeed*dt/1000);
+        }
+        //k键后退
+        else if(event_sys.keyBoard.K()) {
+            this.Move(0,0, -this.moveSpeed*dt/1000);
+        }
+        //j键左移
+        else if(event_sys.keyBoard.J()){
+            this.Move(-this.moveSpeed*dt/1000,0,0);
+        }
+        //l键右移
+        else if(event_sys.keyBoard.L()){
+            this.Move(this.moveSpeed*dt/1000,0,0);
+        }
     }
 }
 
@@ -51,17 +51,24 @@ class YggCamera extends Camera{
         super(name);
         //旋转速度
         this.rotateSpeed = 50;
+        this.curangle = 0;
     }
 
     //场景漫游
     update(dt) {
         //按↑抬头看
         if(event_sys.keyBoard.UpArrow()){
-            this.RotateX(-this.rotateSpeed*dt/1000);
+            if(this.curangle > -60){
+                this.curangle -= this.rotateSpeed*dt/1000;
+                this.RotateX(-this.rotateSpeed*dt/1000);
+            }
         }
         //按↓低头看
         else if(event_sys.keyBoard.DownArrow()){
-            this.RotateX(this.rotateSpeed*dt/1000);
+            if(this.curangle < 60){
+                this.curangle += this.rotateSpeed*dt/1000;
+                this.RotateX(this.rotateSpeed*dt/1000);
+            }
         }
     }
 }
@@ -78,4 +85,4 @@ let neck = new YggNeck("neck");
 scene.addChild(body);
 body.addChild(neck);
 neck.addChild(camera_1);
-body.Move(0,20,0);
+body.Move(0,-20,0);

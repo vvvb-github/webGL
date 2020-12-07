@@ -238,7 +238,7 @@ Target4.dispX = -250;
 TargetList.push(Target4);
 
 
-// let ground = new Cube("ground");
+// let ground = new House("ground");
 // scene.addChild(ground);
 // ground.Resize(10000,10000,10000);
 // ground.Resize(10000,10,10000);

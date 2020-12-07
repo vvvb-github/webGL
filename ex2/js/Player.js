@@ -1,4 +1,4 @@
-class Player extends Cube {
+class Player extends House {
     constructor(name) {
         super(name);
         this.moveSpeed = 50;
@@ -67,7 +67,7 @@ class Player extends Cube {
     }
 }
 
-class Arm extends Cube {
+class Arm extends House {
     constructor(name) {
         super(name);
         this.fired = 0;
@@ -169,12 +169,12 @@ scene.addChild(player);
 player.addChild(camera_1);
 camera_1.Move(0,75,45);
 // 头部
-let head = new Cube('head');
+let head = new House('head');
 head.Resize(25,25,25);
 head.Move(0,75,0);
 player.addChild(head);
 // 左臂
-let larm = new Cube('larm');
+let larm = new House('larm');
 larm.Resize(10,40,10);
 larm.Move(-55,15,0);
 player.addChild(larm);
