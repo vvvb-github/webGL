@@ -1,6 +1,8 @@
 class Scene extends Node {
     constructor() {
         super('scene');
+
+        this.ambient = [1,1,1]; //环境光默认是白色
     }
 
     updateFrame(dt, trans) {
@@ -9,5 +11,6 @@ class Scene extends Node {
             if(!child.live) this.children.splice(index,1);
             else child.updateFrame(dt, trans);
         });
+        gl.uniform3fv(gl.getUniformLocation(program,'u_La'),new Float32Array(this.ambient));
     }
 }

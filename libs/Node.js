@@ -15,15 +15,16 @@ class Node {
         this.parent = null;
         this.vertices = [];
         this.normals = [];
-        this.colors = [];
-        this.smooth = 0;
         this.active = true;
         this.live = true;
         this.name = name;
         this.visible = true;
-        this.texture = null;
-        this.texcoords = [];
         this.drawWay = gl.TRIANGLES;
+
+        this.ambient = [];  //物体环境光
+        this.specular = []; //物体镜面反射
+        this.diffuse = [];  //物体漫反射
+        this.beta = 10;
     }
 
     addChild(node) {
@@ -112,29 +113,11 @@ class Node {
 
     draw() {
         setAttrib('a_position', this.vertices, 3);
-
-        if(this.texture) {
-            setAttrib('a_texcoord', this.texcoords, 2);
-            gl.uniform1i(gl.getUniformLocation(program,'u_usetexture'), 1);
-
-            gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, this.texture);
-            
-            let w = this.texture.width, h = this.texture.height;
-            if ((w&(w-1)==0) && (h&(h-1)==0)) {
-                gl.generateMipmap(gl.TEXTURE_2D);
-            } else {
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            }
-        } else {
-            setAttrib('a_color', this.colors, 4);
-            gl.uniform1i(gl.getUniformLocation(program,'u_usetexture'), 0);
-        }
-
         setAttrib('a_normal', this.normals, 3);
-        gl.uniform1f(gl.getUniformLocation(program,'u_smooth'), this.smooth);
+        setAttrib('a_ambient',this.ambient,3);
+        setAttrib('a_specular',this.specular,3);
+        setAttrib('a_diffuse',this.diffuse,3);
+        gl.uniform1f(gl.getUniformLocation(program,'u_beta'),this.beta);
 
         gl.drawArrays(this.drawWay, 0, this.vertices.length / 3);
     }

@@ -2,77 +2,74 @@ const lightShader = {
     vertexSource: `
         precision mediump float;
         attribute vec4 a_position;
-        attribute vec4 a_color;
         attribute vec4 a_normal;
+        attribute vec3 a_ambient;
+        attribute vec3 a_specular;
+        attribute vec3 a_diffuse;
         uniform mat4 u_matrix;
         uniform mat4 u_project;
         uniform mat4 u_camera;
 
-        attribute vec2 a_texcoord;
-        uniform sampler2D u_texture;
-        uniform int u_usetexture;
-
-        uniform float u_smooth;
-        uniform mat4 u_lightMat[10];
-        uniform vec3 u_lightColor[10];
-        uniform float u_brightness[10];
-        uniform int u_lightCount;
-
+        varying vec4 v_position;
         varying vec4 v_color;
+        varying vec4 v_normal;
+        varying vec3 u_Ka;
+        varying vec3 u_Ks;
+        varying vec3 u_Kd;
 
         void main() {
             vec4 pos = u_camera * u_matrix * a_position;
 
             gl_Position = u_project * vec4(pos.xy, -pos.z, pos.w);
-
-            vec4 color;
-            if(u_usetexture == 0) color = a_color;
-            else color = texture2D(u_texture, a_texcoord);
-            v_color = color;
-
-            if(u_lightCount <= 0) return;
-            vec4 clr = vec4(0.0, 0.0, 0.0, 1.0);
-            for(int i=0;i<10;i++) {
-                if(i>=u_lightCount) break;
-                v_color = color;
-                vec4 lightpos = u_camera * u_lightMat[i] * vec4(0.0, 0.0, 0.0, 1.0);
-                vec3 lightdir = normalize(lightpos.xyz - pos.xyz);
-                vec4 normals = u_camera * u_matrix * a_normal;
-                normals -= u_camera * u_matrix * vec4(0.0, 0.0, 0.0, 1.0);
-                vec3 normal = normalize(normals.xyz);
-
-                float light = dot(lightdir, normal);
-                v_color.rgb *= light * u_brightness[i];
-
-                vec3 cameradir = -normalize(pos.xyz);
-                vec3 middle = normalize(cameradir + lightdir);
-                float highlight = dot(middle, normal);
-                if(u_smooth<0.001) {
-                    highlight = 0.0;
-                } else {
-                    if(highlight<=0.0) {
-                        highlight = pow(-highlight, 1.0 / u_smooth);
-                        highlight = -highlight;
-                    } else {
-                        highlight = pow(highlight, 1.0 / u_smooth);
-                    }
-                }
-                v_color.rgb += highlight * u_brightness[i] * u_lightColor[i];
-
-                if(clr.r<v_color.r) clr.r=v_color.r;
-                if(clr.g<v_color.g) clr.g=v_color.g;
-                if(clr.b<v_color.b) clr.b=v_color.b;
-            }
-
-            v_color = clr;
+            
+            u_Ka = a_ambient;
+            u_Ks = a_specular;
+            u_Kd = a_diffuse;
+            
+            v_position = pos; 
+            v_normal = a_normal;
         }
     `,
     fragmentSource: `
         precision mediump float;
-        varying vec4 v_color;
+        varying vec4 v_position;
+        varying vec4 v_normal;
+        
+        uniform float u_beta;
+        uniform mat4 u_lightMat;
+        uniform vec3 u_Ld;
+        uniform vec3 u_Ls;
+        uniform vec3 u_La;
+        varying vec3 u_Kd;
+        varying vec3 u_Ks;
+        varying vec3 u_Ka;
+
 
         void main() {
-            gl_FragColor = v_color;
+            float a = 1.0;
+            float b = 0.0;
+            float c = 0.0;
+            vec3 l = vec3((u_lightMat * vec4(0.0,0.0,0.0,1.0) - v_position).xyz);
+            float d2 = dot(l, l);
+            l = normalize(l);
+            vec3 v = vec3((-v_position).xyz);
+            v = normalize(v);
+            vec3 h = l + v;
+            h = normalize(h);
+            vec3 n = normalize(vec3(v_normal.xyz));
+            
+            float temp1 = dot(l, n);
+            if (temp1 < 0.0)
+                temp1 = 0.0;
+            
+            float temp2 = dot(n, h);
+            if(temp2 < 0.0)
+                temp2 = 0.0;
+            
+            vec3 I = u_Ka * u_La + (u_Kd * u_Ld * 
+                temp1 + u_Ks * u_Ls * pow(temp2, u_beta))/(a + b * sqrt(d2) + c * d2);
+        
+            gl_FragColor = vec4(I.xyz, 1.0);
         }
     `
 };
