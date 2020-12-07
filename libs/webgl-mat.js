@@ -123,6 +123,7 @@ function multiMat(a, b) {
  * @return {Mat} 矩阵
  */
 function projectMat(fieldOfViewInRadians, aspect, near, far) {
+    fieldOfViewInRadians = fieldOfViewInRadians / 180 * Math.PI;
     let f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     let rangeInv = 1.0 / (near - far);
  

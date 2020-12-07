@@ -3,6 +3,7 @@ class YggBody extends Node {
         super(name);
         //移动速度
         this.moveSpeed = 20;
+        this.rotateSpeed = 50;
     }
 
     //场景漫游
@@ -23,20 +24,8 @@ class YggBody extends Node {
         else if(event_sys.keyBoard.L()){
             this.Move(this.moveSpeed*dt/1000,0,0);
         }
-    }
-}
-
-class YggNeck extends Node{
-    constructor(name) {
-        super(name);
-        //旋转速度
-        this.rotateSpeed = 50;
-    }
-
-    //场景漫游
-    update(dt) {
         //按←向左看
-        if(event_sys.keyBoard.LeftArrow()){
+        else if(event_sys.keyBoard.LeftArrow()){
             this.RotateY(this.rotateSpeed*dt/1000);
         }
         //按→向右看
@@ -80,9 +69,6 @@ let camera_1 = new YggCamera("camera_1");
 //观察者身体（虚空）
 //身体实现相机的左右移动
 let body = new YggBody("body");
-//脖子实现相机的视角左右旋转
-let neck = new YggNeck("neck");
 scene.addChild(body);
-body.addChild(neck);
-neck.addChild(camera_1);
+body.addChild(camera_1);
 body.Move(0,-20,0);
