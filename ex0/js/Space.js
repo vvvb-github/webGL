@@ -1,17 +1,40 @@
 class Space extends Node {
-    constructor(r) {
-        super('space');
+    constructor(w, h, x, y) {
+        super('spaceUnit');
 
-        this.vertices = drawSphereY(-1, 1, r);
-        this.vertices.forEach(num=>{
-            this.normals.push(-num);
-        });
-        this.smooth = 0.03;
-        this.drawWay = gl.TRIANGLE_STRIP;
-        this.texture = new Image();
-        this.texture.crossOrigin = 'anonymous';
-        this.texture.src = 'http://www.kxhome.xyz:8085/space.png';
-        this.texcoords = SphereAngle(-1, 1, r);
-        // for(let i=0;i<this.texcoords.length;++i) this.texcoords[i]*=5;
+        this.vertices = [
+            -1, -1, 0,
+            -1, 1, 0,
+            1, 1, 0,
+            1, 1, 0,
+            1, -1, 0,
+            -1, -1, 0
+        ];
+        for(let i=0;i<6;++i) {
+            this.normals.push(0,0,-1);
+            this.specular.push(1,0.5,0);
+        }
+        this.emissive = [1,1,1];
+
+        this.loadTexture(url + 'space.jpg');
+        this.texcoords = [
+            0, 0,
+            0, y,
+            x, y,
+            x, y,
+            x, 0,
+            0, 0
+        ];
+
+        this.Resize(w, h, 1);
+
+        this.brightness = 1;
+        this.dir = 0.5;
+    }
+
+    update(dt) {
+        this.brightness += this.dir*dt/1000;
+        if(this.brightness > 1.5 || this.brightness < 0) this.dir *= -1;
+        this.emissive = [this.brightness,this.brightness,this.brightness];
     }
 }

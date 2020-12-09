@@ -4,12 +4,13 @@ class Planet extends Node {
 
         this.vertices = drawSphereY(-1, 1, r);
         this.normals = this.vertices;
+        for(let i=0;i<this.vertices.length/3;++i) {
+            this.specular.push(0.1,0.1,0.1);
+        }
+        this.beta = 10;
         
-        this.texture = new Image();
-        this.texture.crossOrigin = 'anonymous';
-        this.texture.src = src;
+        this.loadTexture(src);
         this.texcoords = SphereAngle(-1, 1, r);
-        console.log(this.texcoords);
         this.drawWay = gl.TRIANGLE_STRIP;
 
         this.self_rotspeed = spd_self;
@@ -23,14 +24,6 @@ class Planet extends Node {
 class Orbital extends Node {
     constructor(r, spd, planet, name) {
         super(name);
-
-        this.vertices = drawRingY3D([0,-1,0],r,[0,1,0],r);
-        for(let i=0;i<this.vertices.length/3;++i) {
-            this.colors.push(1,1,1,1);
-        }
-        this.vertices.forEach(num=>{
-            this.normals.push(-num);
-        });
 
         this.addChild(planet);
         planet.Move(0, 0, -r);

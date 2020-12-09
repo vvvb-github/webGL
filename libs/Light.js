@@ -14,7 +14,6 @@ class PointLight extends Node {
         gl.uniformMatrix4fv(gl.getUniformLocation(program, 'u_lightMat'), false, mat);
         gl.uniform3fv(gl.getUniformLocation(program,'u_Ls'),new Float32Array(this.l_specular));
         gl.uniform3fv(gl.getUniformLocation(program,'u_Ld'),new Float32Array(this.l_diffuse));
-        if (this.visible) this.draw();
 
         // 子节点递归更新
         this.children.forEach((child,index)=>{
