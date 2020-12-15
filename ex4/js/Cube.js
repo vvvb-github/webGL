@@ -21,8 +21,8 @@ class Cube extends Node {
         }
 
         this.texcoords = SphereAngle(-1, 1, 1000);
-        for(let i=0;i<this.texcoords.length;++i) this.texcoords[i]*=5;
-        this.loadTexture('http://www.kxhome.xyz:8085/space.jpg');
+        for(let i=0;i<this.texcoords.length;++i) this.texcoords[i]*=3;
+        this.loadTexture('http://www.kxhome.xyz:8085/ex0/images/space.jpg');
 
         this.rotSpeed = 60;
         this.moveSpeed = 50;

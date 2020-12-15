@@ -1,8 +1,8 @@
 class Sun extends Node {
-    constructor(r) {
+    constructor(sun) {
         super('sun');
 
-        this.vertices = drawSphereY(-1, 1, r);
+        this.vertices = drawSphereY(-1, 1, sun.radius);
         this.vertices.forEach(num=>{
             this.normals.push(-num);
         });
@@ -14,8 +14,8 @@ class Sun extends Node {
         this.beta = 1;
         this.drawWay = gl.TRIANGLE_STRIP;
 
-        this.loadTexture(url + 'sun.jpg');
-        this.texcoords = this.texcoords = SphereAngle(-1, 1, r);
+        this.loadTexture(sun.texture);
+        this.texcoords = this.texcoords = SphereAngle(-1, 1, sun.radius);
 
         this.light = new PointLight([1,1,1],[1,1,1]);
         this.addChild(this.light);

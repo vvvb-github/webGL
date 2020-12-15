@@ -1,19 +1,19 @@
 class Planet extends Node {
-    constructor(src, r, spd_self, name) {
-        super(name);
+    constructor(param, name) {
+        super('planet_'+name);
 
-        this.vertices = drawSphereY(-1, 1, r);
+        this.vertices = drawSphereY(-1, 1, param.radius);
         this.normals = this.vertices;
         for(let i=0;i<this.vertices.length/3;++i) {
             this.specular.push(0.1,0.1,0.1);
         }
         this.beta = 10;
         
-        this.loadTexture(src);
-        this.texcoords = SphereAngle(-1, 1, r);
+        this.loadTexture(param.texture);
+        this.texcoords = SphereAngle(-1, 1, param.radius);
         this.drawWay = gl.TRIANGLE_STRIP;
 
-        this.self_rotspeed = spd_self;
+        this.self_rotspeed = param.rotation;
     }
 
     update(dt) {
@@ -22,23 +22,17 @@ class Planet extends Node {
 }
 
 class Orbital extends Node {
-    constructor(r, spd, planet, name) {
+    constructor(param, name) {
         super(name);
 
+        let planet = new Planet(param, name);
         this.addChild(planet);
-        planet.Move(0, 0, -r);
+        planet.Move(0, 0, -param.orbitRadius);
 
-        this.rotspeed = spd;
+        this.rotspeed = param.revolution;
     }
 
-    draw() {
-        // setAttrib('a_position', this.vertices, 3);
-        // setAttrib('a_color', this.colors, 4);
-        // setAttrib('a_normal', this.normals, 3);
-        // gl.uniform1f(gl.getUniformLocation(program,'u_smooth'), this.smooth);
-
-        // gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.vertices.length/3);
-    }
+    draw() {}
 
     update(dt) {
         this.RotateY(this.rotspeed*dt/1000);
