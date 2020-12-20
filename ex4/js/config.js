@@ -1,0 +1,1 @@
+const url = 'http://www.kxhome.xyz:8085/ex0/images/';
