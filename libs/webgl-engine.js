@@ -12,6 +12,7 @@ gl.enable(gl.DEPTH_TEST);
 gl.uniform1i(gl.getUniformLocation(program,'u_lightCount'), 0);
 gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_project'),false,
             projectMat(90,gl.canvas.width/gl.canvas.height,1,10000));
+gl.uniform1i(gl.getUniformLocation(program,'u_Count'), 0);
 
 const scene = new Scene();
 const camera = new Camera();

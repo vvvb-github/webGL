@@ -1,18 +1,21 @@
 class SCamera extends Camera {
-    constructor(speed) {
+    constructor(speed, r) {
         super('sphere_camera');
 
         this.moveSpeed = speed;
+        this.mv = r;
     }
 
     update(dt) {
         let d = this.moveSpeed*dt/1000;
 
-        if(event_sys.keyBoard.UpArrow()) {
+        if(event_sys.keyBoard.UpArrow() && this.mv>=0) {
             this.Move(0,0,d);
+            this.mv -= d;
         }
         else if(event_sys.keyBoard.DownArrow()) {
             this.Move(0,0,-d);
+            this.mv += d;
         }
     }
 }
@@ -25,11 +28,11 @@ class Archi extends Node {
         this.rot = 0;
 
         camera.destroy();
-        let c = new SCamera(100);
+        let c = new SCamera(100, r);
         c.Move(0, 0, -r);
         this.addChild(c);
 
-        let space = new Space(4*r, 2*r, 20);
+        let space = new Space(4*r, 2*r);
         space.Move(0,0,2*r);
         c.addChild(space);
     }

@@ -1,5 +1,5 @@
 class Space extends Node {
-    constructor(w, h, b) {
+    constructor(w, h) {
         super('spaceUnit');
 
         this.vertices = [
@@ -12,10 +12,9 @@ class Space extends Node {
         ];
         for(let i=0;i<6;++i) {
             this.normals.push(0,0,-1);
-            this.specular.push(1,0.5,0);
+            this.specular.push(0,0,0);
         }
         this.emissive = [1,1,1];
-        this.beta = b;
 
         this.loadTexture(url + 'space.jpg');
         this.texcoords = [

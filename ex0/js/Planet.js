@@ -7,7 +7,7 @@ class Planet extends Node {
         for(let i=0;i<this.vertices.length/3;++i) {
             this.specular.push(0.1,0.1,0.1);
         }
-        this.beta = 10;
+        this.beta = 20;
         
         this.loadTexture(param.texture);
         this.texcoords = SphereAngle(-1, 1, param.radius);

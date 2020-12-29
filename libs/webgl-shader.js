@@ -28,7 +28,6 @@ const lightShader = {
 
             if(u_usetexture < 1) {
                 v_Ka = a_ambient;
-                v_Kd = a_diffuse;
                 v_texcoord = vec2(-1.0, -1.0);
             } else {
                 v_texcoord = a_texcoord;
@@ -48,15 +47,17 @@ const lightShader = {
         varying vec4 v_normal;
         
         uniform float u_beta;
-        uniform mat4 u_lightMat;
+        uniform mat4 u_lightMat[5];
         uniform vec3 u_Em;
-        uniform vec3 u_Ld;
-        uniform vec3 u_Ls;
+        uniform vec3 u_Ld[5];
+        uniform vec3 u_Ls[5];
+        uniform int u_Count;
         uniform vec3 u_La;
         varying vec3 v_Kd;
         varying vec3 v_Ks;
         varying vec3 v_Ka;
         varying mat4 v_camera;
+        uniform float b[5];
 
         uniform sampler2D u_texture;
         varying vec2 v_texcoord;
@@ -64,34 +65,34 @@ const lightShader = {
         void main() {
             vec3 Ka = v_Ka;
             vec3 Kd = v_Kd;
-            float a = 1.0;
-            float b = 0.0;
-            float c = 0.0;
 
             if(v_texcoord.x >= 0.0) {
                 Ka = vec3(texture2D(u_texture, v_texcoord).rgb);
                 Kd = Ka;
             }
 
-            vec3 l = vec3((v_camera * u_lightMat * vec4(0.0,0.0,0.0,1.0) - v_position).xyz);
-            float d2 = dot(l, l);
-            l = normalize(l);
-            vec3 v = vec3((-v_position).xyz);
-            v = normalize(v);
-            vec3 h = l + v;
-            h = normalize(h);
-            vec3 n = normalize(vec3(v_normal.xyz));
-            
-            float temp1 = dot(l, n);
-            if (temp1 < 0.0)
-                temp1 = 0.0;
-            
-            float temp2 = dot(n, h);
-            if(temp2 < 0.0)
-                temp2 = 0.0;
-            
-            vec3 I = u_Em * Ka + Ka * u_La + (Kd * u_Ld * 
-                temp1 + v_Ks * u_Ls * pow(temp2, u_beta))/(a + b * sqrt(d2) + c * d2);
+            vec3 I = u_Em * Ka + Ka * u_La;
+            for(int i=0;i<5;++i){
+                if(i>=u_Count) break;
+                vec3 l = vec3((v_camera * u_lightMat[i] * vec4(0.0,0.0,0.0,1.0) - v_position).xyz);
+                float d2 = dot(l, l);
+                l = normalize(l);
+                vec3 v = vec3((-v_position).xyz);
+                v = normalize(v);
+                vec3 h = l + v;
+                h = normalize(h);
+                vec3 n = normalize(vec3(v_normal.xyz));
+                
+                float temp1 = dot(l, n);
+                if (temp1 < 0.0)
+                    temp1 = 0.0;
+                
+                float temp2 = dot(n, h);
+                if(temp2 < 0.0)
+                    temp2 = 0.0;
+                
+                I += (Kd * u_Ld[i] * temp1 + v_Ks * u_Ls[i] * pow(temp2, u_beta))/(1.0 + b[i] * sqrt(d2));
+            }
         
             gl_FragColor = vec4(I.xyz, 1.0);
         }

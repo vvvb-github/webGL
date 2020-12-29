@@ -67,5 +67,5 @@ const parameter = {
         revolution: 5.5,
         rotation: 100,
         texture: url + 'neptune.jpg',
-    },
+    }
 }

@@ -105,10 +105,22 @@ function rotate(raw, center, angle) {
     let np = [p[0]*c-p[1]*s, p[0]*s+p[1]*c];
     return [np[0] + center[0], np[1] + center[1]];
 }
-function drawCircleRingY(start, end, center, range){
+let RingAgle = [10,12,15,18,20,30];
+function calRingAngle(range){
+    let k = Math.round(range/10);
+    if(k>4) k = 4;
+    k = 4-k;
+    ////.log(range,k,RingAgle[k]);
+    return RingAgle[k];
+}
+function calSphereStep(range){//0~100 => 10~30
+    return 10 + Math.round(range/5);
+}
+function drawCircleRingY(start, end, center, range,k){
+    ////.log(range)
     let vertices = new Array();
     let a = [center[0] + range, center[2]];
-    let k = 10;
+    ////.log(range);
     let angle1 = 1/180*Math.PI * k;
     a = rotate(a, center, start*angle1);
     let frequency = (end - start) / k;
@@ -117,12 +129,14 @@ function drawCircleRingY(start, end, center, range){
         vertices.push(center[1]);
         vertices.push(a[1]);
         a = rotate(a, [center[0],center[2]], angle1);
+        ////.log(sum);
     }
+    ////.log("end:"+sum);
     return vertices;
 }
-function drawRingY3D(centerA, rangeA, centerB, rangeB){
-    let verticesA = drawCircleRingY(0,360,centerA,rangeA);
-    let verticesB = drawCircleRingY(0,360,centerB,rangeB);
+function drawRingY3D(centerA, rangeA, centerB, rangeB,k){
+    let verticesA = drawCircleRingY(0,360,centerA,rangeA,k);
+    let verticesB = drawCircleRingY(0,360,centerB,rangeB,k);
     let n = verticesA.length;
     let vertices = new Array();
     for(let i=0;i<n;i+=3){
@@ -143,21 +157,21 @@ function drawRingY3D(centerA, rangeA, centerB, rangeB){
  */
 function drawSphereY(start, end, range){//沿着y轴用圆环堆砌成圆 start,end ∈[-1,1]
     let l = start * range, r = end * range;
-    let step = (r-l) / 40;
+    let step = (r-l) / calSphereStep(range);
     let vertices = new Array();
+    let k = calRingAngle(range/2);
     for(let y = l;y < r; y += step){
-        let rangeA = Math.sqrt(range * range - y*y);
+        let rangeA = Math.sqrt(Math.max(range * range - y*y,0));
         let ny = y + step;
-        let rangeB = Math.sqrt(range * range - ny*ny);
-        let temp = drawRingY3D([0,y,0], rangeA, [0,ny,0], rangeB);
+        let rangeB = Math.sqrt(Math.max(range * range - ny*ny,0));
+        let temp = drawRingY3D([0,y,0], rangeA, [0,ny,0], rangeB, k);
         for(let i = 0;i < temp.length;i++)
             vertices.push(temp[i]);
     }
     return vertices;
 }
-function CircleRingYAngle(start, end, center, range){
+function CircleRingYAngle(start, end, center, range,k){
     let vertices = new Array();
-    let k = 10;
     let curAngle = 0;
     let angle = 1/180*Math.PI * k;
     let frequency = (end - start) / k;
@@ -167,9 +181,9 @@ function CircleRingYAngle(start, end, center, range){
     }
     return vertices;
 }
-function RingY3DAngle(centerA, rangeA, centerB, rangeB){
-    let verticesA = CircleRingYAngle(0,360,centerA,rangeA);
-    let verticesB = CircleRingYAngle(0,360,centerB,rangeB);
+function RingY3DAngle(centerA, rangeA, centerB, rangeB,k){
+    let verticesA = CircleRingYAngle(0,360,centerA,rangeA,k);
+    let verticesB = CircleRingYAngle(0,360,centerB,rangeB,k);
     let n = verticesA.length;
     let vertices = new Array();
     for(let i=0;i<n;i++){
@@ -179,16 +193,18 @@ function RingY3DAngle(centerA, rangeA, centerB, rangeB){
     return vertices;
 }
 function SphereAngle(start, end, range){
+    //.log(range);
     let l = start * range, r = end * range;
-    let step = (r-l) / 40;
+    let step = (r-l) / calSphereStep(range);
     let vertices = new Array();
+    let k = calRingAngle(range/2);
     for(let y = l;y < r; y += step){
         let rangeA = Math.sqrt(range * range - y*y);
         let AngleA = Math.acos(y/range);
         let ny = y + step;
         let rangeB = Math.sqrt(range * range - ny*ny);
         let AngleB = Math.acos(ny/range);
-        let temp = RingY3DAngle([0,y,0], rangeA, [0,ny,0], rangeB);
+        let temp = RingY3DAngle([0,y,0], rangeA, [0,ny,0], rangeB,k);
         let invPi = 1/Math.PI;
         for(let i = 0;i < temp.length;i+=2){
             vertices.push(temp[i]*invPi*0.5);
