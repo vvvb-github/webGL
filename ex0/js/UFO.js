@@ -39,7 +39,7 @@ class UFO extends Node {
         this.beta = 10;
         this.emissive = [1,1,1];
 
-        this.Move(0,0,-1500);
+        this.Move(200,0,-750);
         this.addChild(new PointLight([1,1,1],[1,1,1],0.01));
 
         this.mSpeed = 300;
@@ -49,14 +49,14 @@ class UFO extends Node {
     //场景漫游
     update(dt) {
         dt/=1000;
-        if(event_sys.keyBoard.I()) {
+        if(event_sys.keyBoard.W()) {
             this.Move(0,0,this.mSpeed*dt);
-        }else if(event_sys.keyBoard.K()) {
+        }else if(event_sys.keyBoard.S()) {
             this.Move(0,0,-this.mSpeed*dt);
         }
-        if(event_sys.keyBoard.J()) {
+        if(event_sys.keyBoard.A()) {
             this.RotateY(this.rSpeed*dt);
-        }else if(event_sys.keyBoard.L()) {
+        }else if(event_sys.keyBoard.D()) {
             this.RotateY(-this.rSpeed*dt);
         }
     }

@@ -10,6 +10,7 @@ const parameter = {
         orbitRadius: 200,
         revolution: 41,
         rotation: 620,
+        startAngle : 1000,
         texture: url + 'mercury.jpg',
     },
     venus: {
@@ -17,6 +18,7 @@ const parameter = {
         orbitRadius: 300,
         revolution: 16,
         rotation: -180,
+        startAngle : 2000,
         texture: url + 'venus.jpg',
     },
     moon: {
@@ -24,6 +26,7 @@ const parameter = {
         orbitRadius: 30,
         revolution: 30,
         rotation: 10,
+        startAngle : 0,
         texture: url + 'moon.jpg',
     },
     earth: {
@@ -31,6 +34,7 @@ const parameter = {
         orbitRadius: 400,
         revolution: 10,
         rotation: 360,
+        startAngle : 3000,
         texture: url + 'earth.jpg',
     },
     mars: {
@@ -38,6 +42,7 @@ const parameter = {
         orbitRadius: 500,
         revolution: 8,
         rotation: 370,
+        startAngle : 4000,
         texture: url + 'mars.jpg',
     },
     jupiter: {
@@ -45,6 +50,7 @@ const parameter = {
         orbitRadius: 600,
         revolution: 5,
         rotation: 120,
+        startAngle : 5000,
         texture: url + 'jupiter.jpg',
     },
     saturn: {
@@ -52,6 +58,7 @@ const parameter = {
         orbitRadius: 700,
         revolution: 4.5,
         rotation: 150,
+        startAngle : 6000,
         texture: url + 'saturn.jpg',
     },
     uranus: {
@@ -59,6 +66,7 @@ const parameter = {
         orbitRadius: 800,
         revolution: 6,
         rotation: -110,
+        startAngle : 7000,
         texture: url + 'uranus.jpg',
     },
     neptune: {
@@ -66,6 +74,7 @@ const parameter = {
         orbitRadius: 900,
         revolution: 5.5,
         rotation: 100,
+        startAngle : 8000,
         texture: url + 'neptune.jpg',
     }
 }

@@ -14,6 +14,7 @@ class Planet extends Node {
         this.drawWay = gl.TRIANGLE_STRIP;
 
         this.self_rotspeed = param.rotation;
+        this.RotateY(param.startAngle)
     }
 
     update(dt) {
